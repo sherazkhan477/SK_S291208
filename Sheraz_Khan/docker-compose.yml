@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  # Django web service
+  web:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=1
+      - DJANGO_SETTINGS_MODULE=core.settings
+    depends_on:
+      - db
+
+  # PostgreSQL database service
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=samshoes_db
+      - POSTGRES_USER=samshoes_user
+      - POSTGRES_PASSWORD=your_secure_password
+
+  # Jenkins service for CI/CD pipeline
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins
+    ports:
+      - "9090:8080" # Jenkins web UI
+      - "50000:50000" # Agent communication
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock # Access Docker for building images
+    environment:
+      - JAVA_OPTS=-Djenkins.install.runSetupWizard=false # Disable setup wizard for automation
+    depends_on:
+      - web
+      - db
+
+volumes:
+  postgres_data:
+  jenkins_home:
