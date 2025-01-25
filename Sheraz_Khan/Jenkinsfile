@@ -6,7 +6,7 @@ pipeline {
         stage('Checkout Code') {
             steps {
                 // Fetch code from Git repository
-                git branch: 'main', url: 'https://github.com/AbdullahSaeed1217/Sham_E_Store.git'
+                git branch: 'main', url: 'https://github.com/sherazkhan477/SK_S291208.git'
             }
         }
 
