@@ -1,5 +1,0 @@
-- name: Deploy Sham_E_Store
-  hosts: localhost
-  roles:
-    - role: django
- 
