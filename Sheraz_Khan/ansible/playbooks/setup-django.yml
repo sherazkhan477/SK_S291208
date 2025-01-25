@@ -1,12 +1,20 @@
+---
 - name: Setup Django Application
-  hosts: localhost
+  hosts: local  # Ensure this matches your inventory group
   tasks:
-    - name: Ensure Docker is running
-      service:
-        name: docker
-        state: started
+    - name: Ping the local machine to confirm connection
+      ping:
 
-    - name: Build and Start Containers
-      community.docker.docker_compose:
-        project_src: "/home/devops/Sham_Store"
-        state: present
+    - name: Install required dependencies
+      pip:
+        requirements: /home/devops/Sheraz_Khan/requirements.txt
+
+    - name: Run database migrations
+      command: python3 /home/devops/Sheraz_Khan/manage.py migrate
+
+    - name: Collect static files
+      command: python3 /home/devops/Sheraz_Khan/manage.py collectstatic --noinput
+
+    - name: Start the Django development server
+      command: python3 /home/devops/Sheraz_Khan/manage.py runserver 0.0.0.0:8000
+
