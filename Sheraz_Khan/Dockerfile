@@ -19,8 +19,6 @@ COPY requirements.txt /app/
 # Install Python dependencies
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
-RUN pip install gunicorn
-
 
 # Copy the entire project
 COPY . /app/
@@ -29,4 +27,4 @@ COPY . /app/
 EXPOSE 8000
 
 # Command to run the application
-CMD ["gunicorn", "django_web.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
